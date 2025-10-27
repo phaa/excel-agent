@@ -17,6 +17,8 @@ Query made by the user: {query}
 Status of the operation: {status}
 
 Actions taken (if any): {actions}
+
+Result of the operation (if any): {result}
 """
 
 async def result_node(state: GraphState) -> GraphState:
@@ -25,7 +27,10 @@ async def result_node(state: GraphState) -> GraphState:
     """
 
     llm = load_llm()
+    
+    # May have actions or results depending on the previous nodes
     actions = state.get("actions", [])
+    result = state.get("result", None)
     status = state.get("status")
     
     query = None
@@ -45,19 +50,28 @@ async def result_node(state: GraphState) -> GraphState:
 
     log("result_node", message, level="ERROR" if status == "error" else "INFO")
 
-    # Filter only HumanMessage and AIMessage for the final conversation
-    # Avoid technical details in the final message
-    conversation = [
-        msg for msg in state.get("messages", []) 
-        if isinstance(msg, (HumanMessage, AIMessage))
-    ]
-    
-    msgs = [SystemMessage(content=SYSTEM.format(
-        query=query,
-        status=status,
-        actions=actions
-    ))]
-    msgs += conversation
+    print(query)
 
-    ai: AIMessage = await llm.ainvoke(msgs)
-    return {"messages": [ai]}
+    if actions: 
+        print("actions")
+        return {"messages": [AIMessage(content=actions)]}
+    
+    elif result: # return friendly message explaining the result from the executed pandas code
+        print("result")
+        # Filter only HumanMessage and AIMessage for the final conversation
+        # Avoid technical details in the final message
+        conversation = [
+            msg for msg in state.get("messages", []) 
+            if isinstance(msg, (HumanMessage, AIMessage))
+        ]
+        
+        msgs = [SystemMessage(content=SYSTEM.format(
+            query=query,
+            status=status,
+            actions=actions,
+            result=result
+        ))]
+        msgs += conversation
+
+        ai: AIMessage = await llm.ainvoke(msgs)
+        return {"messages": [ai]}

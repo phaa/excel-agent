@@ -7,13 +7,13 @@ def execute_node(state: GraphState) -> GraphState:
     code = state.get("code", "")
     metadata = state.get("metadata", {})
 
-    print(metadata["Cert Mileage Forecast - All"].keys())
+    #print(metadata["Cert Mileage Forecast - All"].keys())
 
     if not code:
         log("execute_node", "No code to execute.", level="ERROR")
         return {"messages": []} # Evita quebrar o fluxo
     
-    if not metadata:
+    if not metadata: 
         log("execute_node", "No metadata available for execution.", level="ERROR")
         return {"messages": []} # Evita quebrar o fluxo
     
@@ -46,7 +46,8 @@ def execute_node(state: GraphState) -> GraphState:
 
         log("execute_node", f"Resultado: {result_dict}")
 
-        return {"result": result}
+        return {"result": result_dict, "status": "success"}
+    
     except Exception as e:
         log("execute_node", f"Error executing code: {e.with_traceback()}", level="ERROR")
-        return {"messages": []} # Evita quebrar o fluxo
+        return {"messages": [], "status": "error"} # Evita quebrar o fluxo

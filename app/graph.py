@@ -9,12 +9,11 @@ from app.state import GraphState
 #from app.tools import tool_node
 
 graph = StateGraph(GraphState)
-graph.add_node("start", start_node)
-
-graph.add_node("reason", reason_node)
-graph.add_node("execute", execute_node)
-graph.add_node("action", actions_node)
-graph.add_node("result", result_node)
+graph.add_node("start", start_node) # Take the user query and decide wether to reason or take actions
+graph.add_node("reason", reason_node) # Reason about user intent and generate pandas code
+graph.add_node("execute", execute_node) # Execute pandas code node
+graph.add_node("action", actions_node) # Generate actions based on user intent
+graph.add_node("result", result_node) # Return the result to the user in a friendly format
 
 
 #graph.add_node("tools", tool_node)
@@ -22,6 +21,7 @@ graph.add_node("result", result_node)
 # ---- Conditional Edges ----
 graph.add_conditional_edges("start", route_from_start) # decide "reason", "action" or END
 graph.add_edge("reason", "execute")
+graph.add_edge("execute", "result")
 graph.add_edge("action", "result")
 
 # ---- Start ----

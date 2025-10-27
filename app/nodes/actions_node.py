@@ -14,7 +14,7 @@ SYSTEM = """
 	{{
 		"action": "add_row",
 		"sheet": "Sheet1",
-		"values": {{"A": 101, "B": "Novo Cliente", "C": "Ativo"}}
+		"values": {{"A": 101, "B": "New Client", "C": "Active"}}
 	}},
 	{{
 		"action": "update_cell",
@@ -32,19 +32,19 @@ SYSTEM = """
 		"action": "update_column",
 		"sheet": "Sheet1",
 		"column": "Status",
-		"condition": "Status == 'Atrasado'",
-		"new_value": "Pago"
+		"condition": "Status == 'Delayed'",
+		"new_value": "Paid"
 	}},
 	{{
 		"action": "add_column",
 		"sheet": "Sheet1",
-		"column_name": "NovaColuna",
+		"column_name": "NewColumn",
 		"default_value": null
 	}},
 	{{
 		"action": "delete_column",
 		"sheet": "Sheet1",
-		"column_name": "Obsoleta"
+		"column_name": "ObsoleteColumn"
 	}}
 	]
 
@@ -108,4 +108,4 @@ async def actions_node(state: GraphState) -> GraphState:
     
     except Exception as e:
         log("actions_node", str(e))
-        return {"actions": [{"action": "error", "message": str(e)}]}
+        return {"actions": [], "status": "error"} # Evita quebrar o fluxo

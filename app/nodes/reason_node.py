@@ -27,9 +27,11 @@ The user wants:
 Generate **only** Python code that uses a DataFrame.
 This dataframe is already loaded in the metadata.
 You can access the dataframe through metadata['SheetName']['data'].
-SheetName is the name of the spreadsheet mentioned by the user in the query
-The downstream code executor is expecting a dataframe named df
+SheetName is the name of the spreadsheet mentioned by the user in the query.
+The downstream code executor is expecting a dataframe named df.
 The result must be saved in the variable `result`.
+Se a operacao permitir tente conservar o BuildID do veículo ao longo da operacao.
+Caso nao seja possivel, ignore este requisito. 
 
 Don't print anything, don't read files.
 """
@@ -72,11 +74,7 @@ async def reason_node(state: GraphState) -> GraphState:
             code = content
 
         log("reason_node", f"Código gerado: {code}")
-
         return {"code": code}
-        log("reason_node", f"Codigo gerado: {response}")
-        #ai = AIMessage(content=content)
-        #return {"messages": state.get("messages", []) + [ai]}
     
     except Exception as e:
         log("reason_node_error", str(e))

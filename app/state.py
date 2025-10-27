@@ -21,6 +21,9 @@ class GraphState(MessagesState, total=False):
     # Reason node
     code: Optional[str]
 
+    # Execute node
+    result: Optional[Any]
+
     # Result node
     status: Optional[str]
     status_msg: Optional[str]
