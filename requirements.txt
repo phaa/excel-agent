@@ -12,3 +12,6 @@ langchain-google-genai
 # Etl com excel
 pandas
 openpyxl
+
+#guardrails
+guardrails-ai
